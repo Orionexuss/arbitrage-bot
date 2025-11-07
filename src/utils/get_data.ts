@@ -13,7 +13,6 @@ export default async function getData(
 
   try {
     const quote = `${url}?inputMint=${tokenA}&outputMint=${tokenB}&amount=${amount}&slippageBps=${SLIPPAGE_BPS}`;
-    console.log("Fetching URL:", quote);
     const response = await fetch(quote);
     const data = (await response.json()) as JupiterQuoteResponse;
 
