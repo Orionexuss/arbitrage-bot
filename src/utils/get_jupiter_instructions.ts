@@ -1,6 +1,6 @@
 import { request } from "undici";
-import { JupiterQuoteResponse } from "../types/types.js";
-import { SWAP_INSTRUCTIONS_BASE_URL } from "../constants/url.js";
+import { JupiterQuoteResponse } from "../types/types";
+import { SWAP_INSTRUCTIONS_BASE_URL } from "../constants/url";
 
 const fetchSwapInstructions = async (
   data1: JupiterQuoteResponse,
