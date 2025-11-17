@@ -1,31 +1,23 @@
 import {
   address,
-  appendTransactionMessageInstruction,
   appendTransactionMessageInstructions,
   compileTransaction,
   createKeyPairFromBytes,
   createKeyPairSignerFromBytes,
-  createRpc,
   createSolanaRpc,
   createTransactionMessage,
   getAddressFromPublicKey,
   getBase64EncodedWireTransaction,
   setTransactionMessageFeePayer,
   setTransactionMessageLifetimeUsingBlockhash,
-  TransactionSigner,
 } from "@solana/kit";
-import fs from "fs";
+import fs  from "fs";
 import os from "os";
 import path from "path";
-import { connect } from "solana-kite";
 import { getRouteInstruction } from "../generated";
 import { decodeRouteData } from "./jupiter_utils";
 
 export default async function buildTx(
-  in_amount: number,
-  quoted_out_amount: number,
-  slippage_bps: number,
-  platform_fee_bps: number,
   accounts: any,
   swapInstructionData: string,
 ) {
@@ -49,17 +41,7 @@ export default async function buildTx(
     userTransferAuthority: signer, // User's signer for token transfers
     userSourceTokenAccount: address(accounts[2].pubkey), // User's source token account
     userDestinationTokenAccount: address(accounts[3].pubkey), // User's destination token account
-    // Skip destinationTokenAccount if it equals program address (optional)
-    destinationTokenAccount:
-      accounts[4].pubkey === "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4"
-        ? undefined
-        : address(accounts[4].pubkey),
     destinationMint: address(accounts[5].pubkey), // Destination token mint
-    // Skip platformFeeAccount if it equals program address (optional)
-    platformFeeAccount:
-      accounts[6].pubkey === "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4"
-        ? undefined
-        : address(accounts[6].pubkey),
     eventAuthority: address(accounts[7].pubkey), // Event logging authority
     program: address(accounts[8].pubkey), // Jupiter program ID
 
@@ -91,6 +73,7 @@ export default async function buildTx(
     messageWithFeePayer,
   );
 
+  // Append the route instruction to the transaction message
   const messageWithInstruction = appendTransactionMessageInstructions(
     [getRouteIx],
     messageWithLifetime,
@@ -104,7 +87,6 @@ export default async function buildTx(
   let simulationResult = await rpc
     .simulateTransaction(transactionBase64, {
       encoding: "base64",
-      sigVerify: false, // Skip signature verification - no SOL needed
       replaceRecentBlockhash: true, // Use current blockhash automatically
       commitment: "processed", // Use latest mainnet state
       innerInstructions: true, // Get detailed program execution logs
@@ -118,4 +100,6 @@ export default async function buildTx(
       },
     })
     .send();
+
+  // console.log(simulationResult);
 }
