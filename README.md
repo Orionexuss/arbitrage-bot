@@ -89,6 +89,19 @@ npm start
 - **Blockchain**: Solana
 - **DEX Aggregator**: Jupiter
 - **SDK**: @solana/kit
+- **Code Generation**: Codama - Generates TypeScript clients from Solana program IDLs
+
+## Development
+
+### Regenerating TypeScript Client
+
+The Jupiter program client is generated from the IDL using Codama:
+
+```bash
+npm run generate
+```
+
+This reads `src/idl/jupiter_idl.json` and generates typed TypeScript code in `src/generated/`.
 
 ## Disclaimer
 
