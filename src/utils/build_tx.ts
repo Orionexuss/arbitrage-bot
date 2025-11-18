@@ -20,7 +20,9 @@ export default async function buildTx(
   walletAddress: Address,
 ) {
   const decodedRouteData = decodeRouteData(swapInstructionData);
-  const rpc = createSolanaRpc("https://api.mainnet-beta.solana.com");
+  const rpcUrl =
+    process.env.ANCHOR_PROVIDER_URL || "https://api.mainnet-beta.solana.com";
+  const rpc = createSolanaRpc(rpcUrl);
 
   const getRouteIx = getRouteInstruction({
     // Account mapping based on Jupiter's expected account order:
@@ -68,11 +70,10 @@ export default async function buildTx(
 
   const transaction = compileTransaction(messageWithInstruction);
 
-  // Convert transaction to base64 for simulation
+  // Convert transaction to base64
   const transactionBase64 = getBase64EncodedWireTransaction(transaction);
 
-  // let signature = await rpc.sendTransaction(transactionBase64, {}).send();
-  const signature = "MOCK_TRANSACTION_SIGNATURE";
+  let signature = await rpc.sendTransaction(transactionBase64, {}).send();
 
   console.log(`  -> Transaction Signature: ${signature}`);
 }
