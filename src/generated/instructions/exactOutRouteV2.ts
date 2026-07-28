@@ -36,14 +36,14 @@ import {
   type TransactionSigner,
   type WritableAccount,
 } from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
+import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
 import {
   getRoutePlanStepV2Decoder,
   getRoutePlanStepV2Encoder,
   type RoutePlanStepV2,
   type RoutePlanStepV2Args,
-} from '../types';
+} from '../types/index.js';
 
 export const EXACT_OUT_ROUTE_V2_DISCRIMINATOR = new Uint8Array([
   157, 138, 184, 82, 21, 244, 243, 36,

@@ -41,7 +41,7 @@ import {
   type RemainingAccountsInfoArgs,
   type Side,
   type SideArgs,
-} from '.';
+} from './index.js';
 
 export type Swap =
   | { __kind: 'Saber' }

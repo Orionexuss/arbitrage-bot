@@ -48,6 +48,6 @@ export type JupiterQuoteResponse = {
   quoteId: string;
   maker: string;
   expireAt: string;
-  errorCode?: number; // opcional: solo aparece si hay error
-  errorMessage?: string; // opcional: solo aparece si hay error
+  errorCode?: number; // optional: only appears if there is an error
+  errorMessage?: string; // optional: only appears if there is an error
 };

@@ -6,15 +6,15 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './accountsType';
-export * from './defiTunaAccountsType';
-export * from './feeEvent';
-export * from './remainingAccountsInfo';
-export * from './remainingAccountsSlice';
-export * from './routePlanStep';
-export * from './routePlanStepV2';
-export * from './side';
-export * from './swap';
-export * from './swapEvent';
-export * from './swapEventV2';
-export * from './swapsEvent';
+export * from './accountsType.js';
+export * from './defiTunaAccountsType.js';
+export * from './feeEvent.js';
+export * from './remainingAccountsInfo.js';
+export * from './remainingAccountsSlice.js';
+export * from './routePlanStep.js';
+export * from './routePlanStepV2.js';
+export * from './side.js';
+export * from './swap.js';
+export * from './swapEvent.js';
+export * from './swapEventV2.js';
+export * from './swapsEvent.js';

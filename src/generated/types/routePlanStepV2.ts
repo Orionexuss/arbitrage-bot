@@ -18,7 +18,7 @@ import {
   type Decoder,
   type Encoder,
 } from '@solana/kit';
-import { getSwapDecoder, getSwapEncoder, type Swap, type SwapArgs } from '.';
+import { getSwapDecoder, getSwapEncoder, type Swap, type SwapArgs } from './index.js';
 
 export type RoutePlanStepV2 = {
   swap: Swap;

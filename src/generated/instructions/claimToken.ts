@@ -34,12 +34,12 @@ import {
   type WritableAccount,
   type WritableSignerAccount,
 } from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs';
+import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared';
+} from '../shared/index.js';
 
 export const CLAIM_TOKEN_DISCRIMINATOR = new Uint8Array([
   116, 206, 27, 191, 166, 19, 0, 73,

@@ -10,8 +10,8 @@ import {
   type Address,
   type TransactionSigner,
 } from "@solana/kit";
-import { getRouteInstruction } from "../generated";
-import { decodeRouteData } from "./jupiter_utils";
+import { getRouteInstruction } from "../generated/index.js";
+import { decodeRouteData } from "./jupiter_utils.js";
 
 export default async function buildTx(
   accounts: any,

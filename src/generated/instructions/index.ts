@@ -6,19 +6,19 @@
  * @see https://github.com/codama-idl/codama
  */
 
-export * from './claim';
-export * from './claimToken';
-export * from './closeToken';
-export * from './createTokenAccount';
-export * from './createTokenLedger';
-export * from './exactOutRoute';
-export * from './exactOutRouteV2';
-export * from './route';
-export * from './routeV2';
-export * from './routeWithTokenLedger';
-export * from './setTokenLedger';
-export * from './sharedAccountsExactOutRoute';
-export * from './sharedAccountsExactOutRouteV2';
-export * from './sharedAccountsRoute';
-export * from './sharedAccountsRouteV2';
-export * from './sharedAccountsRouteWithTokenLedger';
+export * from './claim.js';
+export * from './claimToken.js';
+export * from './closeToken.js';
+export * from './createTokenAccount.js';
+export * from './createTokenLedger.js';
+export * from './exactOutRoute.js';
+export * from './exactOutRouteV2.js';
+export * from './route.js';
+export * from './routeV2.js';
+export * from './routeWithTokenLedger.js';
+export * from './setTokenLedger.js';
+export * from './sharedAccountsExactOutRoute.js';
+export * from './sharedAccountsExactOutRouteV2.js';
+export * from './sharedAccountsRoute.js';
+export * from './sharedAccountsRouteV2.js';
+export * from './sharedAccountsRouteWithTokenLedger.js';

@@ -29,8 +29,8 @@ import {
   type ReadonlyUint8Array,
   type WritableAccount,
 } from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
+import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
 
 export const CLAIM_DISCRIMINATOR = new Uint8Array([
   62, 198, 214, 193, 213, 159, 108, 210,

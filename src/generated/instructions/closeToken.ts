@@ -34,8 +34,8 @@ import {
   type TransactionSigner,
   type WritableAccount,
 } from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
+import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
 
 export const CLOSE_TOKEN_DISCRIMINATOR = new Uint8Array([
   26, 74, 236, 151, 104, 64, 183, 249,

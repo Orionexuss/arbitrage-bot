@@ -1,13 +1,13 @@
 import { config } from "dotenv";
-import { SWAP_QUOTE_LITE_BASE_URL } from "./constants/url";
-import buildTx from "./utils/build_tx";
-import getData from "./utils/get_data";
-import { fetchSwapInstructions } from "./utils/get_jupiter_instructions";
-import { sleep } from "./utils/sleep";
+import { SWAP_QUOTE_LITE_BASE_URL } from "./constants/url.js";
+import buildTx from "./utils/build_tx.js";
+import getData from "./utils/get_data.js";
+import { fetchSwapInstructions } from "./utils/get_jupiter_instructions.js";
+import { sleep } from "./utils/sleep.js";
 import os from "os";
 import path from "path";
 import fs from "fs";
-import { STABLE_COIN } from "./constants/address";
+import { STABLE_COIN } from "./constants/address.js";
 import {
   createKeyPairFromBytes,
   createKeyPairSignerFromBytes,

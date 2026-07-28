@@ -38,14 +38,14 @@ import {
   type TransactionSigner,
   type WritableAccount,
 } from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
+import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
 import {
   getRoutePlanStepDecoder,
   getRoutePlanStepEncoder,
   type RoutePlanStep,
   type RoutePlanStepArgs,
-} from '../types';
+} from '../types/index.js';
 
 export const SHARED_ACCOUNTS_ROUTE_WITH_TOKEN_LEDGER_DISCRIMINATOR =
   new Uint8Array([230, 121, 143, 80, 119, 159, 106, 170]);

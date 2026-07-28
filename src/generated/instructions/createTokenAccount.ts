@@ -32,8 +32,8 @@ import {
   type WritableAccount,
   type WritableSignerAccount,
 } from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
+import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
 
 export const CREATE_TOKEN_ACCOUNT_DISCRIMINATOR = new Uint8Array([
   147, 241, 123, 100, 244, 132, 174, 118,

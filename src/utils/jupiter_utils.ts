@@ -1,4 +1,4 @@
-import { getRouteInstructionDataDecoder } from "../generated/instructions/route";
+import { getRouteInstructionDataDecoder } from "../generated/instructions/route.js";
 
 /**
  * Decode Jupiter route instruction data from base64

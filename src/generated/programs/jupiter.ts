@@ -30,7 +30,7 @@ import {
   type ParsedSharedAccountsRouteInstruction,
   type ParsedSharedAccountsRouteV2Instruction,
   type ParsedSharedAccountsRouteWithTokenLedgerInstruction,
-} from '../instructions';
+} from '../instructions/index.js';
 
 export const JUPITER_PROGRAM_ADDRESS =
   'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4' as Address<'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4'>;

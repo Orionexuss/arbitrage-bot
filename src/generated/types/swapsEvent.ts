@@ -21,7 +21,7 @@ import {
   getSwapEventV2Encoder,
   type SwapEventV2,
   type SwapEventV2Args,
-} from '.';
+} from './index.js';
 
 export type SwapsEvent = { swapEvents: Array<SwapEventV2> };
 

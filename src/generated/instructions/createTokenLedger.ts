@@ -29,8 +29,8 @@ import {
   type TransactionSigner,
   type WritableSignerAccount,
 } from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared';
+import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
+import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
 
 export const CREATE_TOKEN_LEDGER_DISCRIMINATOR = new Uint8Array([
   232, 242, 197, 253, 240, 143, 129, 52,
