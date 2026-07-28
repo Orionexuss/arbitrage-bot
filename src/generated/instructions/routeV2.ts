@@ -35,15 +35,15 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getRoutePlanStepV2Decoder,
   getRoutePlanStepV2Encoder,
   type RoutePlanStepV2,
   type RoutePlanStepV2Args,
-} from '../types/index.js';
+} from "../types";
 
 export const ROUTE_V2_DISCRIMINATOR = new Uint8Array([
   187, 100, 250, 204, 49, 196, 175, 20,
@@ -57,17 +57,15 @@ export type RouteV2Instruction<
   TProgram extends string = typeof JUPITER_PROGRAM_ADDRESS,
   TAccountUserTransferAuthority extends string | AccountMeta<string> = string,
   TAccountUserSourceTokenAccount extends string | AccountMeta<string> = string,
-  TAccountUserDestinationTokenAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountUserDestinationTokenAccount extends string | AccountMeta<string> =
+    string,
   TAccountSourceMint extends string | AccountMeta<string> = string,
   TAccountDestinationMint extends string | AccountMeta<string> = string,
   TAccountSourceTokenProgram extends string | AccountMeta<string> = string,
   TAccountDestinationTokenProgram extends string | AccountMeta<string> = string,
   TAccountDestinationTokenAccount extends string | AccountMeta<string> = string,
-  TAccountEventAuthority extends
-    | string
-    | AccountMeta<string> = 'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf',
+  TAccountEventAuthority extends string | AccountMeta<string> =
+    "D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf",
   TAccountProgram extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -131,27 +129,27 @@ export type RouteV2InstructionDataArgs = {
 export function getRouteV2InstructionDataEncoder(): Encoder<RouteV2InstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['inAmount', getU64Encoder()],
-      ['quotedOutAmount', getU64Encoder()],
-      ['slippageBps', getU16Encoder()],
-      ['platformFeeBps', getU16Encoder()],
-      ['positiveSlippageBps', getU16Encoder()],
-      ['routePlan', getArrayEncoder(getRoutePlanStepV2Encoder())],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["inAmount", getU64Encoder()],
+      ["quotedOutAmount", getU64Encoder()],
+      ["slippageBps", getU16Encoder()],
+      ["platformFeeBps", getU16Encoder()],
+      ["positiveSlippageBps", getU16Encoder()],
+      ["routePlan", getArrayEncoder(getRoutePlanStepV2Encoder())],
     ]),
-    (value) => ({ ...value, discriminator: ROUTE_V2_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: ROUTE_V2_DISCRIMINATOR }),
   );
 }
 
 export function getRouteV2InstructionDataDecoder(): Decoder<RouteV2InstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['inAmount', getU64Decoder()],
-    ['quotedOutAmount', getU64Decoder()],
-    ['slippageBps', getU16Decoder()],
-    ['platformFeeBps', getU16Decoder()],
-    ['positiveSlippageBps', getU16Decoder()],
-    ['routePlan', getArrayDecoder(getRoutePlanStepV2Decoder())],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["inAmount", getU64Decoder()],
+    ["quotedOutAmount", getU64Decoder()],
+    ["slippageBps", getU16Decoder()],
+    ["platformFeeBps", getU16Decoder()],
+    ["positiveSlippageBps", getU16Decoder()],
+    ["routePlan", getArrayDecoder(getRoutePlanStepV2Decoder())],
   ]);
 }
 
@@ -161,7 +159,7 @@ export function getRouteV2InstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getRouteV2InstructionDataEncoder(),
-    getRouteV2InstructionDataDecoder()
+    getRouteV2InstructionDataDecoder(),
   );
 }
 
@@ -187,12 +185,12 @@ export type RouteV2Input<
   destinationTokenAccount?: Address<TAccountDestinationTokenAccount>;
   eventAuthority?: Address<TAccountEventAuthority>;
   program: Address<TAccountProgram>;
-  inAmount: RouteV2InstructionDataArgs['inAmount'];
-  quotedOutAmount: RouteV2InstructionDataArgs['quotedOutAmount'];
-  slippageBps: RouteV2InstructionDataArgs['slippageBps'];
-  platformFeeBps: RouteV2InstructionDataArgs['platformFeeBps'];
-  positiveSlippageBps: RouteV2InstructionDataArgs['positiveSlippageBps'];
-  routePlan: RouteV2InstructionDataArgs['routePlan'];
+  inAmount: RouteV2InstructionDataArgs["inAmount"];
+  quotedOutAmount: RouteV2InstructionDataArgs["quotedOutAmount"];
+  slippageBps: RouteV2InstructionDataArgs["slippageBps"];
+  platformFeeBps: RouteV2InstructionDataArgs["platformFeeBps"];
+  positiveSlippageBps: RouteV2InstructionDataArgs["positiveSlippageBps"];
+  routePlan: RouteV2InstructionDataArgs["routePlan"];
 };
 
 export function getRouteV2Instruction<
@@ -220,7 +218,7 @@ export function getRouteV2Instruction<
     TAccountEventAuthority,
     TAccountProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): RouteV2Instruction<
   TProgramAddress,
   TAccountUserTransferAuthority,
@@ -282,10 +280,10 @@ export function getRouteV2Instruction<
   // Resolve default values.
   if (!accounts.eventAuthority.value) {
     accounts.eventAuthority.value =
-      'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf' as Address<'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf'>;
+      "D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf" as Address<"D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.userTransferAuthority),
@@ -300,7 +298,7 @@ export function getRouteV2Instruction<
       getAccountMeta(accounts.program),
     ],
     data: getRouteV2InstructionDataEncoder().encode(
-      args as RouteV2InstructionDataArgs
+      args as RouteV2InstructionDataArgs,
     ),
     programAddress,
   } as RouteV2Instruction<
@@ -344,11 +342,11 @@ export function parseRouteV2Instruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedRouteV2Instruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 10) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

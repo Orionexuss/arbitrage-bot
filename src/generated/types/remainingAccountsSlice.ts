@@ -15,7 +15,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export type RemainingAccountsSlice = { accountsType: number; length: number };
 
@@ -23,15 +23,15 @@ export type RemainingAccountsSliceArgs = RemainingAccountsSlice;
 
 export function getRemainingAccountsSliceEncoder(): FixedSizeEncoder<RemainingAccountsSliceArgs> {
   return getStructEncoder([
-    ['accountsType', getU8Encoder()],
-    ['length', getU8Encoder()],
+    ["accountsType", getU8Encoder()],
+    ["length", getU8Encoder()],
   ]);
 }
 
 export function getRemainingAccountsSliceDecoder(): FixedSizeDecoder<RemainingAccountsSlice> {
   return getStructDecoder([
-    ['accountsType', getU8Decoder()],
-    ['length', getU8Decoder()],
+    ["accountsType", getU8Decoder()],
+    ["length", getU8Decoder()],
   ]);
 }
 
@@ -41,6 +41,6 @@ export function getRemainingAccountsSliceCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getRemainingAccountsSliceEncoder(),
-    getRemainingAccountsSliceDecoder()
+    getRemainingAccountsSliceDecoder(),
   );
 }

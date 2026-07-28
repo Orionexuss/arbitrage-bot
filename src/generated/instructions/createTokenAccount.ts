@@ -31,9 +31,9 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CREATE_TOKEN_ACCOUNT_DISCRIMINATOR = new Uint8Array([
   147, 241, 123, 100, 244, 132, 174, 118,
@@ -41,7 +41,7 @@ export const CREATE_TOKEN_ACCOUNT_DISCRIMINATOR = new Uint8Array([
 
 export function getCreateTokenAccountDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    CREATE_TOKEN_ACCOUNT_DISCRIMINATOR
+    CREATE_TOKEN_ACCOUNT_DISCRIMINATOR,
   );
 }
 
@@ -50,12 +50,10 @@ export type CreateTokenAccountInstruction<
   TAccountTokenAccount extends string | AccountMeta<string> = string,
   TAccountUser extends string | AccountMeta<string> = string,
   TAccountMint extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -90,17 +88,20 @@ export type CreateTokenAccountInstructionDataArgs = { bump: number };
 export function getCreateTokenAccountInstructionDataEncoder(): FixedSizeEncoder<CreateTokenAccountInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['bump', getU8Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["bump", getU8Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: CREATE_TOKEN_ACCOUNT_DISCRIMINATOR })
+    (value) => ({
+      ...value,
+      discriminator: CREATE_TOKEN_ACCOUNT_DISCRIMINATOR,
+    }),
   );
 }
 
 export function getCreateTokenAccountInstructionDataDecoder(): FixedSizeDecoder<CreateTokenAccountInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['bump', getU8Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["bump", getU8Decoder()],
   ]);
 }
 
@@ -110,7 +111,7 @@ export function getCreateTokenAccountInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getCreateTokenAccountInstructionDataEncoder(),
-    getCreateTokenAccountInstructionDataDecoder()
+    getCreateTokenAccountInstructionDataDecoder(),
   );
 }
 
@@ -126,7 +127,7 @@ export type CreateTokenAccountInput<
   mint: Address<TAccountMint>;
   tokenProgram?: Address<TAccountTokenProgram>;
   systemProgram?: Address<TAccountSystemProgram>;
-  bump: CreateTokenAccountInstructionDataArgs['bump'];
+  bump: CreateTokenAccountInstructionDataArgs["bump"];
 };
 
 export function getCreateTokenAccountInstruction<
@@ -144,7 +145,7 @@ export function getCreateTokenAccountInstruction<
     TAccountTokenProgram,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CreateTokenAccountInstruction<
   TProgramAddress,
   TAccountTokenAccount,
@@ -175,14 +176,14 @@ export function getCreateTokenAccountInstruction<
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.tokenAccount),
@@ -192,7 +193,7 @@ export function getCreateTokenAccountInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getCreateTokenAccountInstructionDataEncoder().encode(
-      args as CreateTokenAccountInstructionDataArgs
+      args as CreateTokenAccountInstructionDataArgs,
     ),
     programAddress,
   } as CreateTokenAccountInstruction<
@@ -226,11 +227,11 @@ export function parseCreateTokenAccountInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCreateTokenAccountInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 5) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -248,7 +249,7 @@ export function parseCreateTokenAccountInstruction<
       systemProgram: getNextAccount(),
     },
     data: getCreateTokenAccountInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

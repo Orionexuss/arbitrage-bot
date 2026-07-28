@@ -7,13 +7,32 @@
  */
 
 import {
+  assertIsInstructionWithAccounts,
   containsBytes,
   fixEncoderSize,
   getBytesEncoder,
   type Address,
+  type Instruction,
+  type InstructionWithData,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 import {
+  parseClaimInstruction,
+  parseClaimTokenInstruction,
+  parseCloseTokenInstruction,
+  parseCreateTokenAccountInstruction,
+  parseCreateTokenLedgerInstruction,
+  parseExactOutRouteInstruction,
+  parseExactOutRouteV2Instruction,
+  parseRouteInstruction,
+  parseRouteV2Instruction,
+  parseRouteWithTokenLedgerInstruction,
+  parseSetTokenLedgerInstruction,
+  parseSharedAccountsExactOutRouteInstruction,
+  parseSharedAccountsExactOutRouteV2Instruction,
+  parseSharedAccountsRouteInstruction,
+  parseSharedAccountsRouteV2Instruction,
+  parseSharedAccountsRouteWithTokenLedgerInstruction,
   type ParsedClaimInstruction,
   type ParsedClaimTokenInstruction,
   type ParsedCloseTokenInstruction,
@@ -30,32 +49,32 @@ import {
   type ParsedSharedAccountsRouteInstruction,
   type ParsedSharedAccountsRouteV2Instruction,
   type ParsedSharedAccountsRouteWithTokenLedgerInstruction,
-} from '../instructions/index.js';
+} from "../instructions";
 
 export const JUPITER_PROGRAM_ADDRESS =
-  'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4' as Address<'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4'>;
+  "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4" as Address<"JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4">;
 
 export enum JupiterAccount {
   TokenLedger,
 }
 
 export function identifyJupiterAccount(
-  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  account: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): JupiterAccount {
-  const data = 'data' in account ? account.data : account;
+  const data = "data" in account ? account.data : account;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([156, 247, 9, 188, 54, 108, 85, 77])
+        new Uint8Array([156, 247, 9, 188, 54, 108, 85, 77]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterAccount.TokenLedger;
   }
   throw new Error(
-    'The provided account could not be identified as a jupiter account.'
+    "The provided account could not be identified as a jupiter account.",
   );
 }
 
@@ -79,16 +98,16 @@ export enum JupiterInstruction {
 }
 
 export function identifyJupiterInstruction(
-  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array
+  instruction: { data: ReadonlyUint8Array } | ReadonlyUint8Array,
 ): JupiterInstruction {
-  const data = 'data' in instruction ? instruction.data : instruction;
+  const data = "data" in instruction ? instruction.data : instruction;
   if (
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([62, 198, 214, 193, 213, 159, 108, 210])
+        new Uint8Array([62, 198, 214, 193, 213, 159, 108, 210]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.Claim;
@@ -97,9 +116,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([116, 206, 27, 191, 166, 19, 0, 73])
+        new Uint8Array([116, 206, 27, 191, 166, 19, 0, 73]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.ClaimToken;
@@ -108,9 +127,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([26, 74, 236, 151, 104, 64, 183, 249])
+        new Uint8Array([26, 74, 236, 151, 104, 64, 183, 249]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.CloseToken;
@@ -119,9 +138,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([232, 242, 197, 253, 240, 143, 129, 52])
+        new Uint8Array([232, 242, 197, 253, 240, 143, 129, 52]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.CreateTokenLedger;
@@ -130,9 +149,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([147, 241, 123, 100, 244, 132, 174, 118])
+        new Uint8Array([147, 241, 123, 100, 244, 132, 174, 118]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.CreateTokenAccount;
@@ -141,9 +160,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([208, 51, 239, 151, 123, 43, 237, 92])
+        new Uint8Array([208, 51, 239, 151, 123, 43, 237, 92]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.ExactOutRoute;
@@ -152,9 +171,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([229, 23, 203, 151, 122, 227, 173, 42])
+        new Uint8Array([229, 23, 203, 151, 122, 227, 173, 42]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.Route;
@@ -163,9 +182,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([150, 86, 71, 116, 167, 93, 14, 104])
+        new Uint8Array([150, 86, 71, 116, 167, 93, 14, 104]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.RouteWithTokenLedger;
@@ -174,9 +193,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([228, 85, 185, 112, 78, 79, 77, 2])
+        new Uint8Array([228, 85, 185, 112, 78, 79, 77, 2]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.SetTokenLedger;
@@ -185,9 +204,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([176, 209, 105, 168, 154, 125, 69, 62])
+        new Uint8Array([176, 209, 105, 168, 154, 125, 69, 62]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.SharedAccountsExactOutRoute;
@@ -196,9 +215,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([193, 32, 155, 51, 65, 214, 156, 129])
+        new Uint8Array([193, 32, 155, 51, 65, 214, 156, 129]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.SharedAccountsRoute;
@@ -207,9 +226,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([230, 121, 143, 80, 119, 159, 106, 170])
+        new Uint8Array([230, 121, 143, 80, 119, 159, 106, 170]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.SharedAccountsRouteWithTokenLedger;
@@ -218,9 +237,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([157, 138, 184, 82, 21, 244, 243, 36])
+        new Uint8Array([157, 138, 184, 82, 21, 244, 243, 36]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.ExactOutRouteV2;
@@ -229,9 +248,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([187, 100, 250, 204, 49, 196, 175, 20])
+        new Uint8Array([187, 100, 250, 204, 49, 196, 175, 20]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.RouteV2;
@@ -240,9 +259,9 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([53, 96, 229, 202, 216, 187, 250, 24])
+        new Uint8Array([53, 96, 229, 202, 216, 187, 250, 24]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.SharedAccountsExactOutRouteV2;
@@ -251,20 +270,20 @@ export function identifyJupiterInstruction(
     containsBytes(
       data,
       fixEncoderSize(getBytesEncoder(), 8).encode(
-        new Uint8Array([209, 152, 83, 147, 124, 254, 216, 233])
+        new Uint8Array([209, 152, 83, 147, 124, 254, 216, 233]),
       ),
-      0
+      0,
     )
   ) {
     return JupiterInstruction.SharedAccountsRouteV2;
   }
   throw new Error(
-    'The provided instruction could not be identified as a jupiter instruction.'
+    "The provided instruction could not be identified as a jupiter instruction.",
   );
 }
 
 export type ParsedJupiterInstruction<
-  TProgram extends string = 'JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4',
+  TProgram extends string = "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
 > =
   | ({
       instructionType: JupiterInstruction.Claim;
@@ -314,3 +333,127 @@ export type ParsedJupiterInstruction<
   | ({
       instructionType: JupiterInstruction.SharedAccountsRouteV2;
     } & ParsedSharedAccountsRouteV2Instruction<TProgram>);
+
+export function parseJupiterInstruction<TProgram extends string>(
+  instruction: Instruction<TProgram> & InstructionWithData<ReadonlyUint8Array>,
+): ParsedJupiterInstruction<TProgram> {
+  const instructionType = identifyJupiterInstruction(instruction);
+  switch (instructionType) {
+    case JupiterInstruction.Claim: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.Claim,
+        ...parseClaimInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.ClaimToken: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.ClaimToken,
+        ...parseClaimTokenInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.CloseToken: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.CloseToken,
+        ...parseCloseTokenInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.CreateTokenLedger: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.CreateTokenLedger,
+        ...parseCreateTokenLedgerInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.CreateTokenAccount: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.CreateTokenAccount,
+        ...parseCreateTokenAccountInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.ExactOutRoute: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.ExactOutRoute,
+        ...parseExactOutRouteInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.Route: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.Route,
+        ...parseRouteInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.RouteWithTokenLedger: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.RouteWithTokenLedger,
+        ...parseRouteWithTokenLedgerInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.SetTokenLedger: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.SetTokenLedger,
+        ...parseSetTokenLedgerInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.SharedAccountsExactOutRoute: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.SharedAccountsExactOutRoute,
+        ...parseSharedAccountsExactOutRouteInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.SharedAccountsRoute: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.SharedAccountsRoute,
+        ...parseSharedAccountsRouteInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.SharedAccountsRouteWithTokenLedger: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.SharedAccountsRouteWithTokenLedger,
+        ...parseSharedAccountsRouteWithTokenLedgerInstruction(instruction),
+      };
+    }
+    case JupiterInstruction.ExactOutRouteV2: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.ExactOutRouteV2,
+        ...parseExactOutRouteV2Instruction(instruction),
+      };
+    }
+    case JupiterInstruction.RouteV2: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.RouteV2,
+        ...parseRouteV2Instruction(instruction),
+      };
+    }
+    case JupiterInstruction.SharedAccountsExactOutRouteV2: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.SharedAccountsExactOutRouteV2,
+        ...parseSharedAccountsExactOutRouteV2Instruction(instruction),
+      };
+    }
+    case JupiterInstruction.SharedAccountsRouteV2: {
+      assertIsInstructionWithAccounts(instruction);
+      return {
+        instructionType: JupiterInstruction.SharedAccountsRouteV2,
+        ...parseSharedAccountsRouteV2Instruction(instruction),
+      };
+    }
+    default:
+      throw new Error(
+        `Unrecognized instruction type: ${instructionType as string}`,
+      );
+  }
+}

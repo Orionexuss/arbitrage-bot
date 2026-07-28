@@ -14,37 +14,41 @@ import {
   getAddressFromPublicKey,
 } from "@solana/kit";
 config();
+import { formatTokenAmount } from "./utils/format_token_amount.js";
 
-const LAMPORTS_PER_SOL = 1000;
+const USD_AMOUNT = 100;
 
 async function getRoute(
   tokenA: string,
   tokenB: string,
-  amount: number,
+  raw_amount: number,
   walletAddress: string,
 ) {
   const { data1: quote1, data2: quote2 } = await getData(
     SWAP_QUOTE_LITE_BASE_URL,
     tokenA,
     tokenB,
-    amount,
+    raw_amount,
   );
 
-  const profit = Number(quote2.outAmount) - amount;
-  const profitPercent = ((profit / amount) * 100).toFixed(2);
+  const profit = Number(quote2.outAmount) - raw_amount;
+  const profitPercent = ((profit / raw_amount) * 100).toFixed(2);
 
-  if (amount >= Number(quote2.outAmount)) {
-    console.log("\n" + "=".repeat(60));
-    console.log(`  Input Amount:  $${amount.toFixed(2)}`);
-    console.log(`  Output Amount: $${Number(quote2.outAmount).toFixed(2)}`);
-    console.log(`  Profit:        $${profit.toFixed(2)} (${profitPercent}%)`);
+  const inputAmount = formatTokenAmount(raw_amount, 6, 2); // Assuming 6 decimals for USDC
+  const outputAmount = formatTokenAmount(Number(quote2.outAmount), 6, 2);
+  const profitFormatted = formatTokenAmount(profit, 6, 6);
+
+
+  if (raw_amount>= Number(quote2.outAmount)) {
+    console.log(`  Input Amount:  $${inputAmount}`);
+    console.log(`  Output Amount: $${outputAmount}`);
+    console.log(`  Profit:        $${profitFormatted} (${profitPercent}%)`);
     console.log(`  Status:        SKIPPED - No profit opportunity`);
     return;
   } else {
-    console.log("\n" + "=".repeat(60));
-    console.log(`  Input Amount:  $${amount.toFixed(2)}`);
-    console.log(`  Output Amount: $${Number(quote2.outAmount).toFixed(2)}`);
-    console.log(`  Profit:        $${profit.toFixed(2)} (${profitPercent}%)`);
+    console.log(`  Input Amount:  $${inputAmount}`);
+    console.log(`  Output Amount: $${outputAmount}`);
+    console.log(`  Profit:        $${profitFormatted} (${profitPercent}%)`);
     console.log(`  Status:        EXECUTING ARBITRAGE`);
   }
 
@@ -54,13 +58,13 @@ async function getRoute(
     walletAddress,
   );
 
-  return { ix1, ix2, quote1, quote2 };
+  return { ix1, ix2 };
 }
 
 async function main() {
   const tokenA = STABLE_COIN.usdc; // USDC Mint
   const tokenB = "So11111111111111111111111111111111111111112"; // SOL Mint
-  const amount = LAMPORTS_PER_SOL;
+  const amount =  USD_AMOUNT * 1e6; // Convert USD to lamports (6 decimals for USDC)
 
   // Load keypair once at startup
   const keypairPath = path.join(os.homedir(), ".config", "solana", "id.json");
@@ -73,7 +77,7 @@ async function main() {
   console.log("\n" + "=".repeat(60));
   console.log("  SOLANA ARBITRAGE BOT");
   console.log(`  Monitoring: ${tokenA} <-> ${tokenB}`);
-  console.log("  Amount: $" + amount.toFixed(2));
+  console.log("  Amount: $" + amount)
   console.log(`  Wallet: ${walletAddress}`);
   console.log("  Interval: 15 seconds");
 
@@ -82,29 +86,14 @@ async function main() {
       const timestamp = new Date().toLocaleTimeString();
       console.log("=".repeat(60));
       console.log(`\n[${timestamp}] Checking arbitrage opportunity...`);
+      console.log("\n")
 
-      getRoute(tokenA, tokenB, amount, walletAddress)
-        .then((data) => {
-          if (!data) {
-            return;
-          }
-          buildTx(
-            data.ix1.swapInstruction.accounts,
-            data.ix1.swapInstruction.data,
-            signer,
-            walletAddress,
-          );
-
-          buildTx(
-            data.ix2.swapInstruction.accounts,
-            data.ix2.swapInstruction.data,
-            signer,
-            walletAddress,
-          );
-        })
-        .catch((error) => {
-          console.error(`\n[ERROR] Failed to get swap route:`, error.message);
-        });
+      const data = await getRoute(tokenA, tokenB, amount, walletAddress);
+      if (data) {
+        // Execute legs in order so leg 2 only runs after leg 1 is submitted.
+        await buildTx(data.ix1, signer, walletAddress);
+        await buildTx(data.ix2, signer, walletAddress);
+      }
     } catch (error) {
       console.error(`\n[ERROR] Main loop error:`, error);
     }

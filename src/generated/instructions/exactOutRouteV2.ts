@@ -35,15 +35,15 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getRoutePlanStepV2Decoder,
   getRoutePlanStepV2Encoder,
   type RoutePlanStepV2,
   type RoutePlanStepV2Args,
-} from '../types/index.js';
+} from "../types";
 
 export const EXACT_OUT_ROUTE_V2_DISCRIMINATOR = new Uint8Array([
   157, 138, 184, 82, 21, 244, 243, 36,
@@ -51,7 +51,7 @@ export const EXACT_OUT_ROUTE_V2_DISCRIMINATOR = new Uint8Array([
 
 export function getExactOutRouteV2DiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    EXACT_OUT_ROUTE_V2_DISCRIMINATOR
+    EXACT_OUT_ROUTE_V2_DISCRIMINATOR,
   );
 }
 
@@ -59,17 +59,15 @@ export type ExactOutRouteV2Instruction<
   TProgram extends string = typeof JUPITER_PROGRAM_ADDRESS,
   TAccountUserTransferAuthority extends string | AccountMeta<string> = string,
   TAccountUserSourceTokenAccount extends string | AccountMeta<string> = string,
-  TAccountUserDestinationTokenAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountUserDestinationTokenAccount extends string | AccountMeta<string> =
+    string,
   TAccountSourceMint extends string | AccountMeta<string> = string,
   TAccountDestinationMint extends string | AccountMeta<string> = string,
   TAccountSourceTokenProgram extends string | AccountMeta<string> = string,
   TAccountDestinationTokenProgram extends string | AccountMeta<string> = string,
   TAccountDestinationTokenAccount extends string | AccountMeta<string> = string,
-  TAccountEventAuthority extends
-    | string
-    | AccountMeta<string> = 'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf',
+  TAccountEventAuthority extends string | AccountMeta<string> =
+    "D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf",
   TAccountProgram extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -133,27 +131,27 @@ export type ExactOutRouteV2InstructionDataArgs = {
 export function getExactOutRouteV2InstructionDataEncoder(): Encoder<ExactOutRouteV2InstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['outAmount', getU64Encoder()],
-      ['quotedInAmount', getU64Encoder()],
-      ['slippageBps', getU16Encoder()],
-      ['platformFeeBps', getU16Encoder()],
-      ['positiveSlippageBps', getU16Encoder()],
-      ['routePlan', getArrayEncoder(getRoutePlanStepV2Encoder())],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["outAmount", getU64Encoder()],
+      ["quotedInAmount", getU64Encoder()],
+      ["slippageBps", getU16Encoder()],
+      ["platformFeeBps", getU16Encoder()],
+      ["positiveSlippageBps", getU16Encoder()],
+      ["routePlan", getArrayEncoder(getRoutePlanStepV2Encoder())],
     ]),
-    (value) => ({ ...value, discriminator: EXACT_OUT_ROUTE_V2_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: EXACT_OUT_ROUTE_V2_DISCRIMINATOR }),
   );
 }
 
 export function getExactOutRouteV2InstructionDataDecoder(): Decoder<ExactOutRouteV2InstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['outAmount', getU64Decoder()],
-    ['quotedInAmount', getU64Decoder()],
-    ['slippageBps', getU16Decoder()],
-    ['platformFeeBps', getU16Decoder()],
-    ['positiveSlippageBps', getU16Decoder()],
-    ['routePlan', getArrayDecoder(getRoutePlanStepV2Decoder())],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["outAmount", getU64Decoder()],
+    ["quotedInAmount", getU64Decoder()],
+    ["slippageBps", getU16Decoder()],
+    ["platformFeeBps", getU16Decoder()],
+    ["positiveSlippageBps", getU16Decoder()],
+    ["routePlan", getArrayDecoder(getRoutePlanStepV2Decoder())],
   ]);
 }
 
@@ -163,7 +161,7 @@ export function getExactOutRouteV2InstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getExactOutRouteV2InstructionDataEncoder(),
-    getExactOutRouteV2InstructionDataDecoder()
+    getExactOutRouteV2InstructionDataDecoder(),
   );
 }
 
@@ -189,12 +187,12 @@ export type ExactOutRouteV2Input<
   destinationTokenAccount?: Address<TAccountDestinationTokenAccount>;
   eventAuthority?: Address<TAccountEventAuthority>;
   program: Address<TAccountProgram>;
-  outAmount: ExactOutRouteV2InstructionDataArgs['outAmount'];
-  quotedInAmount: ExactOutRouteV2InstructionDataArgs['quotedInAmount'];
-  slippageBps: ExactOutRouteV2InstructionDataArgs['slippageBps'];
-  platformFeeBps: ExactOutRouteV2InstructionDataArgs['platformFeeBps'];
-  positiveSlippageBps: ExactOutRouteV2InstructionDataArgs['positiveSlippageBps'];
-  routePlan: ExactOutRouteV2InstructionDataArgs['routePlan'];
+  outAmount: ExactOutRouteV2InstructionDataArgs["outAmount"];
+  quotedInAmount: ExactOutRouteV2InstructionDataArgs["quotedInAmount"];
+  slippageBps: ExactOutRouteV2InstructionDataArgs["slippageBps"];
+  platformFeeBps: ExactOutRouteV2InstructionDataArgs["platformFeeBps"];
+  positiveSlippageBps: ExactOutRouteV2InstructionDataArgs["positiveSlippageBps"];
+  routePlan: ExactOutRouteV2InstructionDataArgs["routePlan"];
 };
 
 export function getExactOutRouteV2Instruction<
@@ -222,7 +220,7 @@ export function getExactOutRouteV2Instruction<
     TAccountEventAuthority,
     TAccountProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ExactOutRouteV2Instruction<
   TProgramAddress,
   TAccountUserTransferAuthority,
@@ -284,10 +282,10 @@ export function getExactOutRouteV2Instruction<
   // Resolve default values.
   if (!accounts.eventAuthority.value) {
     accounts.eventAuthority.value =
-      'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf' as Address<'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf'>;
+      "D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf" as Address<"D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.userTransferAuthority),
@@ -302,7 +300,7 @@ export function getExactOutRouteV2Instruction<
       getAccountMeta(accounts.program),
     ],
     data: getExactOutRouteV2InstructionDataEncoder().encode(
-      args as ExactOutRouteV2InstructionDataArgs
+      args as ExactOutRouteV2InstructionDataArgs,
     ),
     programAddress,
   } as ExactOutRouteV2Instruction<
@@ -346,11 +344,11 @@ export function parseExactOutRouteV2Instruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedExactOutRouteV2Instruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 10) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

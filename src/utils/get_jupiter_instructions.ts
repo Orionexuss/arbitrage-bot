@@ -11,6 +11,7 @@ const fetchSwapInstructions = async (
     quoteResponse: data1,
     wrapAndUnwrapSol: false,
     useSharedAccounts: false,
+    asLegacyTransaction: true,
     userPublicKey,
   });
 
@@ -18,6 +19,7 @@ const fetchSwapInstructions = async (
     quoteResponse: data2,
     wrapAndUnwrapSol: false,
     useSharedAccounts: false,
+    asLegacyTransaction: true,
     userPublicKey,
   });
 

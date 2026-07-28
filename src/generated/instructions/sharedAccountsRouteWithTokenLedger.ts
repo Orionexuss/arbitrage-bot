@@ -37,48 +37,44 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getRoutePlanStepDecoder,
   getRoutePlanStepEncoder,
   type RoutePlanStep,
   type RoutePlanStepArgs,
-} from '../types/index.js';
+} from "../types";
 
 export const SHARED_ACCOUNTS_ROUTE_WITH_TOKEN_LEDGER_DISCRIMINATOR =
   new Uint8Array([230, 121, 143, 80, 119, 159, 106, 170]);
 
 export function getSharedAccountsRouteWithTokenLedgerDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    SHARED_ACCOUNTS_ROUTE_WITH_TOKEN_LEDGER_DISCRIMINATOR
+    SHARED_ACCOUNTS_ROUTE_WITH_TOKEN_LEDGER_DISCRIMINATOR,
   );
 }
 
 export type SharedAccountsRouteWithTokenLedgerInstruction<
   TProgram extends string = typeof JUPITER_PROGRAM_ADDRESS,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
   TAccountProgramAuthority extends string | AccountMeta<string> = string,
   TAccountUserTransferAuthority extends string | AccountMeta<string> = string,
   TAccountSourceTokenAccount extends string | AccountMeta<string> = string,
-  TAccountProgramSourceTokenAccount extends
-    | string
-    | AccountMeta<string> = string,
-  TAccountProgramDestinationTokenAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountProgramSourceTokenAccount extends string | AccountMeta<string> =
+    string,
+  TAccountProgramDestinationTokenAccount extends string | AccountMeta<string> =
+    string,
   TAccountDestinationTokenAccount extends string | AccountMeta<string> = string,
   TAccountSourceMint extends string | AccountMeta<string> = string,
   TAccountDestinationMint extends string | AccountMeta<string> = string,
   TAccountPlatformFeeAccount extends string | AccountMeta<string> = string,
   TAccountToken2022Program extends string | AccountMeta<string> = string,
   TAccountTokenLedger extends string | AccountMeta<string> = string,
-  TAccountEventAuthority extends
-    | string
-    | AccountMeta<string> = 'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf',
+  TAccountEventAuthority extends string | AccountMeta<string> =
+    "D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf",
   TAccountProgram extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -152,28 +148,28 @@ export type SharedAccountsRouteWithTokenLedgerInstructionDataArgs = {
 export function getSharedAccountsRouteWithTokenLedgerInstructionDataEncoder(): Encoder<SharedAccountsRouteWithTokenLedgerInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['id', getU8Encoder()],
-      ['routePlan', getArrayEncoder(getRoutePlanStepEncoder())],
-      ['quotedOutAmount', getU64Encoder()],
-      ['slippageBps', getU16Encoder()],
-      ['platformFeeBps', getU8Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["id", getU8Encoder()],
+      ["routePlan", getArrayEncoder(getRoutePlanStepEncoder())],
+      ["quotedOutAmount", getU64Encoder()],
+      ["slippageBps", getU16Encoder()],
+      ["platformFeeBps", getU8Encoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: SHARED_ACCOUNTS_ROUTE_WITH_TOKEN_LEDGER_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getSharedAccountsRouteWithTokenLedgerInstructionDataDecoder(): Decoder<SharedAccountsRouteWithTokenLedgerInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['id', getU8Decoder()],
-    ['routePlan', getArrayDecoder(getRoutePlanStepDecoder())],
-    ['quotedOutAmount', getU64Decoder()],
-    ['slippageBps', getU16Decoder()],
-    ['platformFeeBps', getU8Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["id", getU8Decoder()],
+    ["routePlan", getArrayDecoder(getRoutePlanStepDecoder())],
+    ["quotedOutAmount", getU64Decoder()],
+    ["slippageBps", getU16Decoder()],
+    ["platformFeeBps", getU8Decoder()],
   ]);
 }
 
@@ -183,7 +179,7 @@ export function getSharedAccountsRouteWithTokenLedgerInstructionDataCodec(): Cod
 > {
   return combineCodec(
     getSharedAccountsRouteWithTokenLedgerInstructionDataEncoder(),
-    getSharedAccountsRouteWithTokenLedgerInstructionDataDecoder()
+    getSharedAccountsRouteWithTokenLedgerInstructionDataDecoder(),
   );
 }
 
@@ -217,11 +213,11 @@ export type SharedAccountsRouteWithTokenLedgerInput<
   tokenLedger: Address<TAccountTokenLedger>;
   eventAuthority?: Address<TAccountEventAuthority>;
   program: Address<TAccountProgram>;
-  id: SharedAccountsRouteWithTokenLedgerInstructionDataArgs['id'];
-  routePlan: SharedAccountsRouteWithTokenLedgerInstructionDataArgs['routePlan'];
-  quotedOutAmount: SharedAccountsRouteWithTokenLedgerInstructionDataArgs['quotedOutAmount'];
-  slippageBps: SharedAccountsRouteWithTokenLedgerInstructionDataArgs['slippageBps'];
-  platformFeeBps: SharedAccountsRouteWithTokenLedgerInstructionDataArgs['platformFeeBps'];
+  id: SharedAccountsRouteWithTokenLedgerInstructionDataArgs["id"];
+  routePlan: SharedAccountsRouteWithTokenLedgerInstructionDataArgs["routePlan"];
+  quotedOutAmount: SharedAccountsRouteWithTokenLedgerInstructionDataArgs["quotedOutAmount"];
+  slippageBps: SharedAccountsRouteWithTokenLedgerInstructionDataArgs["slippageBps"];
+  platformFeeBps: SharedAccountsRouteWithTokenLedgerInstructionDataArgs["platformFeeBps"];
 };
 
 export function getSharedAccountsRouteWithTokenLedgerInstruction<
@@ -257,7 +253,7 @@ export function getSharedAccountsRouteWithTokenLedgerInstruction<
     TAccountEventAuthority,
     TAccountProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): SharedAccountsRouteWithTokenLedgerInstruction<
   TProgramAddress,
   TAccountTokenProgram,
@@ -333,14 +329,14 @@ export function getSharedAccountsRouteWithTokenLedgerInstruction<
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.eventAuthority.value) {
     accounts.eventAuthority.value =
-      'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf' as Address<'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf'>;
+      "D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf" as Address<"D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.tokenProgram),
@@ -359,7 +355,7 @@ export function getSharedAccountsRouteWithTokenLedgerInstruction<
       getAccountMeta(accounts.program),
     ],
     data: getSharedAccountsRouteWithTokenLedgerInstructionDataEncoder().encode(
-      args as SharedAccountsRouteWithTokenLedgerInstructionDataArgs
+      args as SharedAccountsRouteWithTokenLedgerInstructionDataArgs,
     ),
     programAddress,
   } as SharedAccountsRouteWithTokenLedgerInstruction<
@@ -411,14 +407,14 @@ export function parseSharedAccountsRouteWithTokenLedgerInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedSharedAccountsRouteWithTokenLedgerInstruction<
   TProgram,
   TAccountMetas
 > {
   if (instruction.accounts.length < 14) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -451,7 +447,7 @@ export function parseSharedAccountsRouteWithTokenLedgerInstruction<
       program: getNextAccount(),
     },
     data: getSharedAccountsRouteWithTokenLedgerInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

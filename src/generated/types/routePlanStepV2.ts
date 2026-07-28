@@ -17,8 +17,8 @@ import {
   type Codec,
   type Decoder,
   type Encoder,
-} from '@solana/kit';
-import { getSwapDecoder, getSwapEncoder, type Swap, type SwapArgs } from './index.js';
+} from "@solana/kit";
+import { getSwapDecoder, getSwapEncoder, type Swap, type SwapArgs } from ".";
 
 export type RoutePlanStepV2 = {
   swap: Swap;
@@ -36,19 +36,19 @@ export type RoutePlanStepV2Args = {
 
 export function getRoutePlanStepV2Encoder(): Encoder<RoutePlanStepV2Args> {
   return getStructEncoder([
-    ['swap', getSwapEncoder()],
-    ['bps', getU16Encoder()],
-    ['inputIndex', getU8Encoder()],
-    ['outputIndex', getU8Encoder()],
+    ["swap", getSwapEncoder()],
+    ["bps", getU16Encoder()],
+    ["inputIndex", getU8Encoder()],
+    ["outputIndex", getU8Encoder()],
   ]);
 }
 
 export function getRoutePlanStepV2Decoder(): Decoder<RoutePlanStepV2> {
   return getStructDecoder([
-    ['swap', getSwapDecoder()],
-    ['bps', getU16Decoder()],
-    ['inputIndex', getU8Decoder()],
-    ['outputIndex', getU8Decoder()],
+    ["swap", getSwapDecoder()],
+    ["bps", getU16Decoder()],
+    ["inputIndex", getU8Decoder()],
+    ["outputIndex", getU8Decoder()],
   ]);
 }
 

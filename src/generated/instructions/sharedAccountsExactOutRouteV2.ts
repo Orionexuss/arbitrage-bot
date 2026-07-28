@@ -37,15 +37,15 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getRoutePlanStepV2Decoder,
   getRoutePlanStepV2Encoder,
   type RoutePlanStepV2,
   type RoutePlanStepV2Args,
-} from '../types/index.js';
+} from "../types";
 
 export const SHARED_ACCOUNTS_EXACT_OUT_ROUTE_V2_DISCRIMINATOR = new Uint8Array([
   53, 96, 229, 202, 216, 187, 250, 24,
@@ -53,7 +53,7 @@ export const SHARED_ACCOUNTS_EXACT_OUT_ROUTE_V2_DISCRIMINATOR = new Uint8Array([
 
 export function getSharedAccountsExactOutRouteV2DiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    SHARED_ACCOUNTS_EXACT_OUT_ROUTE_V2_DISCRIMINATOR
+    SHARED_ACCOUNTS_EXACT_OUT_ROUTE_V2_DISCRIMINATOR,
   );
 }
 
@@ -62,20 +62,17 @@ export type SharedAccountsExactOutRouteV2Instruction<
   TAccountProgramAuthority extends string | AccountMeta<string> = string,
   TAccountUserTransferAuthority extends string | AccountMeta<string> = string,
   TAccountSourceTokenAccount extends string | AccountMeta<string> = string,
-  TAccountProgramSourceTokenAccount extends
-    | string
-    | AccountMeta<string> = string,
-  TAccountProgramDestinationTokenAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountProgramSourceTokenAccount extends string | AccountMeta<string> =
+    string,
+  TAccountProgramDestinationTokenAccount extends string | AccountMeta<string> =
+    string,
   TAccountDestinationTokenAccount extends string | AccountMeta<string> = string,
   TAccountSourceMint extends string | AccountMeta<string> = string,
   TAccountDestinationMint extends string | AccountMeta<string> = string,
   TAccountSourceTokenProgram extends string | AccountMeta<string> = string,
   TAccountDestinationTokenProgram extends string | AccountMeta<string> = string,
-  TAccountEventAuthority extends
-    | string
-    | AccountMeta<string> = 'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf',
+  TAccountEventAuthority extends string | AccountMeta<string> =
+    "D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf",
   TAccountProgram extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -147,32 +144,32 @@ export type SharedAccountsExactOutRouteV2InstructionDataArgs = {
 export function getSharedAccountsExactOutRouteV2InstructionDataEncoder(): Encoder<SharedAccountsExactOutRouteV2InstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['id', getU8Encoder()],
-      ['outAmount', getU64Encoder()],
-      ['quotedInAmount', getU64Encoder()],
-      ['slippageBps', getU16Encoder()],
-      ['platformFeeBps', getU16Encoder()],
-      ['positiveSlippageBps', getU16Encoder()],
-      ['routePlan', getArrayEncoder(getRoutePlanStepV2Encoder())],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["id", getU8Encoder()],
+      ["outAmount", getU64Encoder()],
+      ["quotedInAmount", getU64Encoder()],
+      ["slippageBps", getU16Encoder()],
+      ["platformFeeBps", getU16Encoder()],
+      ["positiveSlippageBps", getU16Encoder()],
+      ["routePlan", getArrayEncoder(getRoutePlanStepV2Encoder())],
     ]),
     (value) => ({
       ...value,
       discriminator: SHARED_ACCOUNTS_EXACT_OUT_ROUTE_V2_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getSharedAccountsExactOutRouteV2InstructionDataDecoder(): Decoder<SharedAccountsExactOutRouteV2InstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['id', getU8Decoder()],
-    ['outAmount', getU64Decoder()],
-    ['quotedInAmount', getU64Decoder()],
-    ['slippageBps', getU16Decoder()],
-    ['platformFeeBps', getU16Decoder()],
-    ['positiveSlippageBps', getU16Decoder()],
-    ['routePlan', getArrayDecoder(getRoutePlanStepV2Decoder())],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["id", getU8Decoder()],
+    ["outAmount", getU64Decoder()],
+    ["quotedInAmount", getU64Decoder()],
+    ["slippageBps", getU16Decoder()],
+    ["platformFeeBps", getU16Decoder()],
+    ["positiveSlippageBps", getU16Decoder()],
+    ["routePlan", getArrayDecoder(getRoutePlanStepV2Decoder())],
   ]);
 }
 
@@ -182,7 +179,7 @@ export function getSharedAccountsExactOutRouteV2InstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getSharedAccountsExactOutRouteV2InstructionDataEncoder(),
-    getSharedAccountsExactOutRouteV2InstructionDataDecoder()
+    getSharedAccountsExactOutRouteV2InstructionDataDecoder(),
   );
 }
 
@@ -212,13 +209,13 @@ export type SharedAccountsExactOutRouteV2Input<
   destinationTokenProgram: Address<TAccountDestinationTokenProgram>;
   eventAuthority?: Address<TAccountEventAuthority>;
   program: Address<TAccountProgram>;
-  id: SharedAccountsExactOutRouteV2InstructionDataArgs['id'];
-  outAmount: SharedAccountsExactOutRouteV2InstructionDataArgs['outAmount'];
-  quotedInAmount: SharedAccountsExactOutRouteV2InstructionDataArgs['quotedInAmount'];
-  slippageBps: SharedAccountsExactOutRouteV2InstructionDataArgs['slippageBps'];
-  platformFeeBps: SharedAccountsExactOutRouteV2InstructionDataArgs['platformFeeBps'];
-  positiveSlippageBps: SharedAccountsExactOutRouteV2InstructionDataArgs['positiveSlippageBps'];
-  routePlan: SharedAccountsExactOutRouteV2InstructionDataArgs['routePlan'];
+  id: SharedAccountsExactOutRouteV2InstructionDataArgs["id"];
+  outAmount: SharedAccountsExactOutRouteV2InstructionDataArgs["outAmount"];
+  quotedInAmount: SharedAccountsExactOutRouteV2InstructionDataArgs["quotedInAmount"];
+  slippageBps: SharedAccountsExactOutRouteV2InstructionDataArgs["slippageBps"];
+  platformFeeBps: SharedAccountsExactOutRouteV2InstructionDataArgs["platformFeeBps"];
+  positiveSlippageBps: SharedAccountsExactOutRouteV2InstructionDataArgs["positiveSlippageBps"];
+  routePlan: SharedAccountsExactOutRouteV2InstructionDataArgs["routePlan"];
 };
 
 export function getSharedAccountsExactOutRouteV2Instruction<
@@ -250,7 +247,7 @@ export function getSharedAccountsExactOutRouteV2Instruction<
     TAccountEventAuthority,
     TAccountProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): SharedAccountsExactOutRouteV2Instruction<
   TProgramAddress,
   TAccountProgramAuthority,
@@ -322,10 +319,10 @@ export function getSharedAccountsExactOutRouteV2Instruction<
   // Resolve default values.
   if (!accounts.eventAuthority.value) {
     accounts.eventAuthority.value =
-      'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf' as Address<'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf'>;
+      "D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf" as Address<"D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.programAuthority),
@@ -342,7 +339,7 @@ export function getSharedAccountsExactOutRouteV2Instruction<
       getAccountMeta(accounts.program),
     ],
     data: getSharedAccountsExactOutRouteV2InstructionDataEncoder().encode(
-      args as SharedAccountsExactOutRouteV2InstructionDataArgs
+      args as SharedAccountsExactOutRouteV2InstructionDataArgs,
     ),
     programAddress,
   } as SharedAccountsExactOutRouteV2Instruction<
@@ -390,11 +387,11 @@ export function parseSharedAccountsExactOutRouteV2Instruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedSharedAccountsExactOutRouteV2Instruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 12) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -419,7 +416,7 @@ export function parseSharedAccountsExactOutRouteV2Instruction<
       program: getNextAccount(),
     },
     data: getSharedAccountsExactOutRouteV2InstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

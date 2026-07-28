@@ -33,9 +33,9 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CLOSE_TOKEN_DISCRIMINATOR = new Uint8Array([
   26, 74, 236, 151, 104, 64, 183, 249,
@@ -47,18 +47,15 @@ export function getCloseTokenDiscriminatorBytes() {
 
 export type CloseTokenInstruction<
   TProgram extends string = typeof JUPITER_PROGRAM_ADDRESS,
-  TAccountOperator extends
-    | string
-    | AccountMeta<string> = '9RAufBfjGQjDfrwxeyKmZWPADHSb8HcoqCdrmpqvCr1g',
-  TAccountWallet extends
-    | string
-    | AccountMeta<string> = '7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP',
+  TAccountOperator extends string | AccountMeta<string> =
+    "9RAufBfjGQjDfrwxeyKmZWPADHSb8HcoqCdrmpqvCr1g",
+  TAccountWallet extends string | AccountMeta<string> =
+    "7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP",
   TAccountProgramAuthority extends string | AccountMeta<string> = string,
   TAccountProgramTokenAccount extends string | AccountMeta<string> = string,
   TAccountMint extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -98,19 +95,19 @@ export type CloseTokenInstructionDataArgs = { id: number; burnAll: boolean };
 export function getCloseTokenInstructionDataEncoder(): FixedSizeEncoder<CloseTokenInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['id', getU8Encoder()],
-      ['burnAll', getBooleanEncoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["id", getU8Encoder()],
+      ["burnAll", getBooleanEncoder()],
     ]),
-    (value) => ({ ...value, discriminator: CLOSE_TOKEN_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CLOSE_TOKEN_DISCRIMINATOR }),
   );
 }
 
 export function getCloseTokenInstructionDataDecoder(): FixedSizeDecoder<CloseTokenInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['id', getU8Decoder()],
-    ['burnAll', getBooleanDecoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["id", getU8Decoder()],
+    ["burnAll", getBooleanDecoder()],
   ]);
 }
 
@@ -120,7 +117,7 @@ export function getCloseTokenInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getCloseTokenInstructionDataEncoder(),
-    getCloseTokenInstructionDataDecoder()
+    getCloseTokenInstructionDataDecoder(),
   );
 }
 
@@ -138,8 +135,8 @@ export type CloseTokenInput<
   programTokenAccount: Address<TAccountProgramTokenAccount>;
   mint: Address<TAccountMint>;
   tokenProgram?: Address<TAccountTokenProgram>;
-  id: CloseTokenInstructionDataArgs['id'];
-  burnAll: CloseTokenInstructionDataArgs['burnAll'];
+  id: CloseTokenInstructionDataArgs["id"];
+  burnAll: CloseTokenInstructionDataArgs["burnAll"];
 };
 
 export function getCloseTokenInstruction<
@@ -159,7 +156,7 @@ export function getCloseTokenInstruction<
     TAccountMint,
     TAccountTokenProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CloseTokenInstruction<
   TProgramAddress,
   TAccountOperator,
@@ -198,18 +195,18 @@ export function getCloseTokenInstruction<
   // Resolve default values.
   if (!accounts.operator.value) {
     accounts.operator.value =
-      '9RAufBfjGQjDfrwxeyKmZWPADHSb8HcoqCdrmpqvCr1g' as Address<'9RAufBfjGQjDfrwxeyKmZWPADHSb8HcoqCdrmpqvCr1g'>;
+      "9RAufBfjGQjDfrwxeyKmZWPADHSb8HcoqCdrmpqvCr1g" as Address<"9RAufBfjGQjDfrwxeyKmZWPADHSb8HcoqCdrmpqvCr1g">;
   }
   if (!accounts.wallet.value) {
     accounts.wallet.value =
-      '7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP' as Address<'7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP'>;
+      "7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP" as Address<"7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP">;
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.operator),
@@ -220,7 +217,7 @@ export function getCloseTokenInstruction<
       getAccountMeta(accounts.tokenProgram),
     ],
     data: getCloseTokenInstructionDataEncoder().encode(
-      args as CloseTokenInstructionDataArgs
+      args as CloseTokenInstructionDataArgs,
     ),
     programAddress,
   } as CloseTokenInstruction<
@@ -256,11 +253,11 @@ export function parseCloseTokenInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCloseTokenInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 6) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

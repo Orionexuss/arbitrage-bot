@@ -12,7 +12,7 @@ export default async function getData(
   let data2: JupiterQuoteResponse;
 
   try {
-    const quote = `${url}?inputMint=${tokenA}&outputMint=${tokenB}&amount=${amount}&slippageBps=${SLIPPAGE_BPS}`;
+    const quote = `${url}?inputMint=${tokenA}&outputMint=${tokenB}&amount=${amount}&slippageBps=${SLIPPAGE_BPS}&asLegacyTransaction=true`;
     const response = await fetch(quote);
     const data = (await response.json()) as JupiterQuoteResponse;
 
@@ -23,7 +23,7 @@ export default async function getData(
   }
 
   try {
-    const quote = `${url}?inputMint=${tokenB}&outputMint=${tokenA}&amount=${data1.outAmount}&slippageBps=${SLIPPAGE_BPS}`;
+    const quote = `${url}?inputMint=${tokenB}&outputMint=${tokenA}&amount=${data1.outAmount}&slippageBps=${SLIPPAGE_BPS}&asLegacyTransaction=true`;
     const response = await fetch(quote);
     const data = (await response.json()) as JupiterQuoteResponse;
 

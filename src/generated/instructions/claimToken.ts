@@ -33,13 +33,13 @@ import {
   type TransactionSigner,
   type WritableAccount,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
 import {
   expectAddress,
   getAccountMetaFactory,
   type ResolvedAccount,
-} from '../shared/index.js';
+} from "../shared";
 
 export const CLAIM_TOKEN_DISCRIMINATOR = new Uint8Array([
   116, 206, 27, 191, 166, 19, 0, 73,
@@ -52,22 +52,18 @@ export function getClaimTokenDiscriminatorBytes() {
 export type ClaimTokenInstruction<
   TProgram extends string = typeof JUPITER_PROGRAM_ADDRESS,
   TAccountPayer extends string | AccountMeta<string> = string,
-  TAccountWallet extends
-    | string
-    | AccountMeta<string> = '7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP',
+  TAccountWallet extends string | AccountMeta<string> =
+    "7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP",
   TAccountProgramAuthority extends string | AccountMeta<string> = string,
   TAccountProgramTokenAccount extends string | AccountMeta<string> = string,
   TAccountDestinationTokenAccount extends string | AccountMeta<string> = string,
   TAccountMint extends string | AccountMeta<string> = string,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
-  TAccountAssociatedTokenProgram extends
-    | string
-    | AccountMeta<string> = 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
+  TAccountAssociatedTokenProgram extends string | AccountMeta<string> =
+    "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL",
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -115,17 +111,17 @@ export type ClaimTokenInstructionDataArgs = { id: number };
 export function getClaimTokenInstructionDataEncoder(): FixedSizeEncoder<ClaimTokenInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['id', getU8Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["id", getU8Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: CLAIM_TOKEN_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CLAIM_TOKEN_DISCRIMINATOR }),
   );
 }
 
 export function getClaimTokenInstructionDataDecoder(): FixedSizeDecoder<ClaimTokenInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['id', getU8Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["id", getU8Decoder()],
   ]);
 }
 
@@ -135,7 +131,7 @@ export function getClaimTokenInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getClaimTokenInstructionDataEncoder(),
-    getClaimTokenInstructionDataDecoder()
+    getClaimTokenInstructionDataDecoder(),
   );
 }
 
@@ -159,7 +155,7 @@ export type ClaimTokenAsyncInput<
   tokenProgram?: Address<TAccountTokenProgram>;
   associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
   systemProgram?: Address<TAccountSystemProgram>;
-  id: ClaimTokenInstructionDataArgs['id'];
+  id: ClaimTokenInstructionDataArgs["id"];
 };
 
 export async function getClaimTokenInstructionAsync<
@@ -185,7 +181,7 @@ export async function getClaimTokenInstructionAsync<
     TAccountAssociatedTokenProgram,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): Promise<
   ClaimTokenInstruction<
     TProgramAddress,
@@ -238,16 +234,16 @@ export async function getClaimTokenInstructionAsync<
   // Resolve default values.
   if (!accounts.wallet.value) {
     accounts.wallet.value =
-      '7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP' as Address<'7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP'>;
+      "7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP" as Address<"7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP">;
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.destinationTokenAccount.value) {
     accounts.destinationTokenAccount.value = await getProgramDerivedAddress({
       programAddress:
-        'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Address<'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'>,
+        "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">,
       seeds: [
         getAddressEncoder().encode(expectAddress(accounts.wallet.value)),
         getAddressEncoder().encode(expectAddress(accounts.tokenProgram.value)),
@@ -257,14 +253,14 @@ export async function getClaimTokenInstructionAsync<
   }
   if (!accounts.associatedTokenProgram.value) {
     accounts.associatedTokenProgram.value =
-      'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Address<'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'>;
+      "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">;
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -278,7 +274,7 @@ export async function getClaimTokenInstructionAsync<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getClaimTokenInstructionDataEncoder().encode(
-      args as ClaimTokenInstructionDataArgs
+      args as ClaimTokenInstructionDataArgs,
     ),
     programAddress,
   } as ClaimTokenInstruction<
@@ -315,7 +311,7 @@ export type ClaimTokenInput<
   tokenProgram?: Address<TAccountTokenProgram>;
   associatedTokenProgram?: Address<TAccountAssociatedTokenProgram>;
   systemProgram?: Address<TAccountSystemProgram>;
-  id: ClaimTokenInstructionDataArgs['id'];
+  id: ClaimTokenInstructionDataArgs["id"];
 };
 
 export function getClaimTokenInstruction<
@@ -341,7 +337,7 @@ export function getClaimTokenInstruction<
     TAccountAssociatedTokenProgram,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ClaimTokenInstruction<
   TProgramAddress,
   TAccountPayer,
@@ -392,22 +388,22 @@ export function getClaimTokenInstruction<
   // Resolve default values.
   if (!accounts.wallet.value) {
     accounts.wallet.value =
-      '7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP' as Address<'7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP'>;
+      "7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP" as Address<"7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP">;
   }
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.associatedTokenProgram.value) {
     accounts.associatedTokenProgram.value =
-      'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL' as Address<'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'>;
+      "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL" as Address<"ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL">;
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.payer),
@@ -421,7 +417,7 @@ export function getClaimTokenInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getClaimTokenInstructionDataEncoder().encode(
-      args as ClaimTokenInstructionDataArgs
+      args as ClaimTokenInstructionDataArgs,
     ),
     programAddress,
   } as ClaimTokenInstruction<
@@ -463,11 +459,11 @@ export function parseClaimTokenInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedClaimTokenInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 9) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

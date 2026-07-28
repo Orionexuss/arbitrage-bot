@@ -18,7 +18,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export type SwapEventV2 = {
   inputMint: Address;
@@ -36,19 +36,19 @@ export type SwapEventV2Args = {
 
 export function getSwapEventV2Encoder(): FixedSizeEncoder<SwapEventV2Args> {
   return getStructEncoder([
-    ['inputMint', getAddressEncoder()],
-    ['inputAmount', getU64Encoder()],
-    ['outputMint', getAddressEncoder()],
-    ['outputAmount', getU64Encoder()],
+    ["inputMint", getAddressEncoder()],
+    ["inputAmount", getU64Encoder()],
+    ["outputMint", getAddressEncoder()],
+    ["outputAmount", getU64Encoder()],
   ]);
 }
 
 export function getSwapEventV2Decoder(): FixedSizeDecoder<SwapEventV2> {
   return getStructDecoder([
-    ['inputMint', getAddressDecoder()],
-    ['inputAmount', getU64Decoder()],
-    ['outputMint', getAddressDecoder()],
-    ['outputAmount', getU64Decoder()],
+    ["inputMint", getAddressDecoder()],
+    ["inputAmount", getU64Decoder()],
+    ["outputMint", getAddressDecoder()],
+    ["outputAmount", getU64Decoder()],
   ]);
 }
 

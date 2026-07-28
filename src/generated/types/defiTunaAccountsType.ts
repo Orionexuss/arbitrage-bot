@@ -13,7 +13,7 @@ import {
   type FixedSizeCodec,
   type FixedSizeDecoder,
   type FixedSizeEncoder,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export enum DefiTunaAccountsType {
   TransferHookA,
@@ -42,6 +42,6 @@ export function getDefiTunaAccountsTypeCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getDefiTunaAccountsTypeEncoder(),
-    getDefiTunaAccountsTypeDecoder()
+    getDefiTunaAccountsTypeDecoder(),
   );
 }

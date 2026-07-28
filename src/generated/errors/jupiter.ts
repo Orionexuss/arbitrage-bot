@@ -11,8 +11,8 @@ import {
   type Address,
   type SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM,
   type SolanaError,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
 
 /** EmptyRoute: Empty route */
 export const JUPITER_ERROR__EMPTY_ROUTE = 0x1770; // 6000
@@ -99,7 +99,7 @@ export type JupiterError =
   | typeof JUPITER_ERROR__TOKEN_PROGRAM_NOT_PROVIDED;
 
 let jupiterErrorMessages: Record<JupiterError, string> | undefined;
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   jupiterErrorMessages = {
     [JUPITER_ERROR__BONDING_CURVE_ALREADY_COMPLETED]: `Bonding curve already completed`,
     [JUPITER_ERROR__EMPTY_ROUTE]: `Empty route`,
@@ -132,11 +132,11 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export function getJupiterErrorMessage(code: JupiterError): string {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== "production") {
     return (jupiterErrorMessages as Record<JupiterError, string>)[code];
   }
 
-  return 'Error message not available in production bundles.';
+  return "Error message not available in production bundles.";
 }
 
 export function isJupiterError<TProgramErrorCode extends JupiterError>(
@@ -144,13 +144,13 @@ export function isJupiterError<TProgramErrorCode extends JupiterError>(
   transactionMessage: {
     instructions: Record<number, { programAddress: Address }>;
   },
-  code?: TProgramErrorCode
+  code?: TProgramErrorCode,
 ): error is SolanaError<typeof SOLANA_ERROR__INSTRUCTION_ERROR__CUSTOM> &
   Readonly<{ context: Readonly<{ code: TProgramErrorCode }> }> {
   return isProgramError<TProgramErrorCode>(
     error,
     transactionMessage,
     JUPITER_PROGRAM_ADDRESS,
-    code
+    code,
   );
 }

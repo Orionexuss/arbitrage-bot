@@ -35,7 +35,7 @@ import {
   type MaybeAccount,
   type MaybeEncodedAccount,
   type ReadonlyUint8Array,
-} from '@solana/kit';
+} from "@solana/kit";
 
 export const TOKEN_LEDGER_DISCRIMINATOR = new Uint8Array([
   156, 247, 9, 188, 54, 108, 85, 77,
@@ -43,7 +43,7 @@ export const TOKEN_LEDGER_DISCRIMINATOR = new Uint8Array([
 
 export function getTokenLedgerDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    TOKEN_LEDGER_DISCRIMINATOR
+    TOKEN_LEDGER_DISCRIMINATOR,
   );
 }
 
@@ -58,25 +58,28 @@ export type TokenLedgerArgs = {
   amount: number | bigint;
 };
 
+/** Gets the encoder for {@link TokenLedgerArgs} account data. */
 export function getTokenLedgerEncoder(): FixedSizeEncoder<TokenLedgerArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['tokenAccount', getAddressEncoder()],
-      ['amount', getU64Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["tokenAccount", getAddressEncoder()],
+      ["amount", getU64Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: TOKEN_LEDGER_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: TOKEN_LEDGER_DISCRIMINATOR }),
   );
 }
 
+/** Gets the decoder for {@link TokenLedger} account data. */
 export function getTokenLedgerDecoder(): FixedSizeDecoder<TokenLedger> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['tokenAccount', getAddressDecoder()],
-    ['amount', getU64Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["tokenAccount", getAddressDecoder()],
+    ["amount", getU64Decoder()],
   ]);
 }
 
+/** Gets the codec for {@link TokenLedger} account data. */
 export function getTokenLedgerCodec(): FixedSizeCodec<
   TokenLedgerArgs,
   TokenLedger
@@ -85,24 +88,24 @@ export function getTokenLedgerCodec(): FixedSizeCodec<
 }
 
 export function decodeTokenLedger<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress>,
 ): Account<TokenLedger, TAddress>;
 export function decodeTokenLedger<TAddress extends string = string>(
-  encodedAccount: MaybeEncodedAccount<TAddress>
+  encodedAccount: MaybeEncodedAccount<TAddress>,
 ): MaybeAccount<TokenLedger, TAddress>;
 export function decodeTokenLedger<TAddress extends string = string>(
-  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>
+  encodedAccount: EncodedAccount<TAddress> | MaybeEncodedAccount<TAddress>,
 ): Account<TokenLedger, TAddress> | MaybeAccount<TokenLedger, TAddress> {
   return decodeAccount(
     encodedAccount as MaybeEncodedAccount<TAddress>,
-    getTokenLedgerDecoder()
+    getTokenLedgerDecoder(),
   );
 }
 
 export async function fetchTokenLedger<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<Account<TokenLedger, TAddress>> {
   const maybeAccount = await fetchMaybeTokenLedger(rpc, address, config);
   assertAccountExists(maybeAccount);
@@ -112,7 +115,7 @@ export async function fetchTokenLedger<TAddress extends string = string>(
 export async function fetchMaybeTokenLedger<TAddress extends string = string>(
   rpc: Parameters<typeof fetchEncodedAccount>[0],
   address: Address<TAddress>,
-  config?: FetchAccountConfig
+  config?: FetchAccountConfig,
 ): Promise<MaybeAccount<TokenLedger, TAddress>> {
   const maybeAccount = await fetchEncodedAccount(rpc, address, config);
   return decodeTokenLedger(maybeAccount);
@@ -121,7 +124,7 @@ export async function fetchMaybeTokenLedger<TAddress extends string = string>(
 export async function fetchAllTokenLedger(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<Account<TokenLedger>[]> {
   const maybeAccounts = await fetchAllMaybeTokenLedger(rpc, addresses, config);
   assertAccountsExist(maybeAccounts);
@@ -131,7 +134,7 @@ export async function fetchAllTokenLedger(
 export async function fetchAllMaybeTokenLedger(
   rpc: Parameters<typeof fetchEncodedAccounts>[0],
   addresses: Array<Address>,
-  config?: FetchAccountsConfig
+  config?: FetchAccountsConfig,
 ): Promise<MaybeAccount<TokenLedger>[]> {
   const maybeAccounts = await fetchEncodedAccounts(rpc, addresses, config);
   return maybeAccounts.map((maybeAccount) => decodeTokenLedger(maybeAccount));

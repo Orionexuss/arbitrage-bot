@@ -37,15 +37,15 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableAccount,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 import {
   getRoutePlanStepDecoder,
   getRoutePlanStepEncoder,
   type RoutePlanStep,
   type RoutePlanStepArgs,
-} from '../types/index.js';
+} from "../types";
 
 export const ROUTE_WITH_TOKEN_LEDGER_DISCRIMINATOR = new Uint8Array([
   150, 86, 71, 116, 167, 93, 14, 104,
@@ -53,27 +53,24 @@ export const ROUTE_WITH_TOKEN_LEDGER_DISCRIMINATOR = new Uint8Array([
 
 export function getRouteWithTokenLedgerDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    ROUTE_WITH_TOKEN_LEDGER_DISCRIMINATOR
+    ROUTE_WITH_TOKEN_LEDGER_DISCRIMINATOR,
   );
 }
 
 export type RouteWithTokenLedgerInstruction<
   TProgram extends string = typeof JUPITER_PROGRAM_ADDRESS,
-  TAccountTokenProgram extends
-    | string
-    | AccountMeta<string> = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+  TAccountTokenProgram extends string | AccountMeta<string> =
+    "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA",
   TAccountUserTransferAuthority extends string | AccountMeta<string> = string,
   TAccountUserSourceTokenAccount extends string | AccountMeta<string> = string,
-  TAccountUserDestinationTokenAccount extends
-    | string
-    | AccountMeta<string> = string,
+  TAccountUserDestinationTokenAccount extends string | AccountMeta<string> =
+    string,
   TAccountDestinationTokenAccount extends string | AccountMeta<string> = string,
   TAccountDestinationMint extends string | AccountMeta<string> = string,
   TAccountPlatformFeeAccount extends string | AccountMeta<string> = string,
   TAccountTokenLedger extends string | AccountMeta<string> = string,
-  TAccountEventAuthority extends
-    | string
-    | AccountMeta<string> = 'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf',
+  TAccountEventAuthority extends string | AccountMeta<string> =
+    "D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf",
   TAccountProgram extends string | AccountMeta<string> = string,
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
@@ -133,26 +130,26 @@ export type RouteWithTokenLedgerInstructionDataArgs = {
 export function getRouteWithTokenLedgerInstructionDataEncoder(): Encoder<RouteWithTokenLedgerInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['routePlan', getArrayEncoder(getRoutePlanStepEncoder())],
-      ['quotedOutAmount', getU64Encoder()],
-      ['slippageBps', getU16Encoder()],
-      ['platformFeeBps', getU8Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["routePlan", getArrayEncoder(getRoutePlanStepEncoder())],
+      ["quotedOutAmount", getU64Encoder()],
+      ["slippageBps", getU16Encoder()],
+      ["platformFeeBps", getU8Encoder()],
     ]),
     (value) => ({
       ...value,
       discriminator: ROUTE_WITH_TOKEN_LEDGER_DISCRIMINATOR,
-    })
+    }),
   );
 }
 
 export function getRouteWithTokenLedgerInstructionDataDecoder(): Decoder<RouteWithTokenLedgerInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['routePlan', getArrayDecoder(getRoutePlanStepDecoder())],
-    ['quotedOutAmount', getU64Decoder()],
-    ['slippageBps', getU16Decoder()],
-    ['platformFeeBps', getU8Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["routePlan", getArrayDecoder(getRoutePlanStepDecoder())],
+    ["quotedOutAmount", getU64Decoder()],
+    ["slippageBps", getU16Decoder()],
+    ["platformFeeBps", getU8Decoder()],
   ]);
 }
 
@@ -162,7 +159,7 @@ export function getRouteWithTokenLedgerInstructionDataCodec(): Codec<
 > {
   return combineCodec(
     getRouteWithTokenLedgerInstructionDataEncoder(),
-    getRouteWithTokenLedgerInstructionDataDecoder()
+    getRouteWithTokenLedgerInstructionDataDecoder(),
   );
 }
 
@@ -188,10 +185,10 @@ export type RouteWithTokenLedgerInput<
   tokenLedger: Address<TAccountTokenLedger>;
   eventAuthority?: Address<TAccountEventAuthority>;
   program: Address<TAccountProgram>;
-  routePlan: RouteWithTokenLedgerInstructionDataArgs['routePlan'];
-  quotedOutAmount: RouteWithTokenLedgerInstructionDataArgs['quotedOutAmount'];
-  slippageBps: RouteWithTokenLedgerInstructionDataArgs['slippageBps'];
-  platformFeeBps: RouteWithTokenLedgerInstructionDataArgs['platformFeeBps'];
+  routePlan: RouteWithTokenLedgerInstructionDataArgs["routePlan"];
+  quotedOutAmount: RouteWithTokenLedgerInstructionDataArgs["quotedOutAmount"];
+  slippageBps: RouteWithTokenLedgerInstructionDataArgs["slippageBps"];
+  platformFeeBps: RouteWithTokenLedgerInstructionDataArgs["platformFeeBps"];
 };
 
 export function getRouteWithTokenLedgerInstruction<
@@ -219,7 +216,7 @@ export function getRouteWithTokenLedgerInstruction<
     TAccountEventAuthority,
     TAccountProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): RouteWithTokenLedgerInstruction<
   TProgramAddress,
   TAccountTokenProgram,
@@ -278,14 +275,14 @@ export function getRouteWithTokenLedgerInstruction<
   // Resolve default values.
   if (!accounts.tokenProgram.value) {
     accounts.tokenProgram.value =
-      'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' as Address<'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'>;
+      "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA" as Address<"TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA">;
   }
   if (!accounts.eventAuthority.value) {
     accounts.eventAuthority.value =
-      'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf' as Address<'D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf'>;
+      "D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf" as Address<"D8cy77BBepLMngZx6ZukaTff5hCt1HrWyKk3Hnd9oitf">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.tokenProgram),
@@ -300,7 +297,7 @@ export function getRouteWithTokenLedgerInstruction<
       getAccountMeta(accounts.program),
     ],
     data: getRouteWithTokenLedgerInstructionDataEncoder().encode(
-      args as RouteWithTokenLedgerInstructionDataArgs
+      args as RouteWithTokenLedgerInstructionDataArgs,
     ),
     programAddress,
   } as RouteWithTokenLedgerInstruction<
@@ -344,11 +341,11 @@ export function parseRouteWithTokenLedgerInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedRouteWithTokenLedgerInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 10) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
@@ -377,7 +374,7 @@ export function parseRouteWithTokenLedgerInstruction<
       program: getNextAccount(),
     },
     data: getRouteWithTokenLedgerInstructionDataDecoder().decode(
-      instruction.data
+      instruction.data,
     ),
   };
 }

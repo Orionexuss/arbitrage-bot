@@ -28,9 +28,9 @@ import {
   type ReadonlyAccount,
   type ReadonlyUint8Array,
   type WritableAccount,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CLAIM_DISCRIMINATOR = new Uint8Array([
   62, 198, 214, 193, 213, 159, 108, 210,
@@ -42,13 +42,11 @@ export function getClaimDiscriminatorBytes() {
 
 export type ClaimInstruction<
   TProgram extends string = typeof JUPITER_PROGRAM_ADDRESS,
-  TAccountWallet extends
-    | string
-    | AccountMeta<string> = '7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP',
+  TAccountWallet extends string | AccountMeta<string> =
+    "7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP",
   TAccountProgramAuthority extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -77,17 +75,17 @@ export type ClaimInstructionDataArgs = { id: number };
 export function getClaimInstructionDataEncoder(): FixedSizeEncoder<ClaimInstructionDataArgs> {
   return transformEncoder(
     getStructEncoder([
-      ['discriminator', fixEncoderSize(getBytesEncoder(), 8)],
-      ['id', getU8Encoder()],
+      ["discriminator", fixEncoderSize(getBytesEncoder(), 8)],
+      ["id", getU8Encoder()],
     ]),
-    (value) => ({ ...value, discriminator: CLAIM_DISCRIMINATOR })
+    (value) => ({ ...value, discriminator: CLAIM_DISCRIMINATOR }),
   );
 }
 
 export function getClaimInstructionDataDecoder(): FixedSizeDecoder<ClaimInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
-    ['id', getU8Decoder()],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
+    ["id", getU8Decoder()],
   ]);
 }
 
@@ -97,7 +95,7 @@ export function getClaimInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getClaimInstructionDataEncoder(),
-    getClaimInstructionDataDecoder()
+    getClaimInstructionDataDecoder(),
   );
 }
 
@@ -109,7 +107,7 @@ export type ClaimInput<
   wallet?: Address<TAccountWallet>;
   programAuthority: Address<TAccountProgramAuthority>;
   systemProgram?: Address<TAccountSystemProgram>;
-  id: ClaimInstructionDataArgs['id'];
+  id: ClaimInstructionDataArgs["id"];
 };
 
 export function getClaimInstruction<
@@ -123,7 +121,7 @@ export function getClaimInstruction<
     TAccountProgramAuthority,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): ClaimInstruction<
   TProgramAddress,
   TAccountWallet,
@@ -153,14 +151,14 @@ export function getClaimInstruction<
   // Resolve default values.
   if (!accounts.wallet.value) {
     accounts.wallet.value =
-      '7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP' as Address<'7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP'>;
+      "7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP" as Address<"7JQeyNK55fkUPUmEotupBFpiBGpgEQYLe8Ht1VdSfxcP">;
   }
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.wallet),
@@ -168,7 +166,7 @@ export function getClaimInstruction<
       getAccountMeta(accounts.systemProgram),
     ],
     data: getClaimInstructionDataEncoder().encode(
-      args as ClaimInstructionDataArgs
+      args as ClaimInstructionDataArgs,
     ),
     programAddress,
   } as ClaimInstruction<
@@ -198,11 +196,11 @@ export function parseClaimInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedClaimInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {

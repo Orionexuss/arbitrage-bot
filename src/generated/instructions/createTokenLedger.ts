@@ -28,9 +28,9 @@ import {
   type ReadonlyUint8Array,
   type TransactionSigner,
   type WritableSignerAccount,
-} from '@solana/kit';
-import { JUPITER_PROGRAM_ADDRESS } from '../programs/index.js';
-import { getAccountMetaFactory, type ResolvedAccount } from '../shared/index.js';
+} from "@solana/kit";
+import { JUPITER_PROGRAM_ADDRESS } from "../programs";
+import { getAccountMetaFactory, type ResolvedAccount } from "../shared";
 
 export const CREATE_TOKEN_LEDGER_DISCRIMINATOR = new Uint8Array([
   232, 242, 197, 253, 240, 143, 129, 52,
@@ -38,7 +38,7 @@ export const CREATE_TOKEN_LEDGER_DISCRIMINATOR = new Uint8Array([
 
 export function getCreateTokenLedgerDiscriminatorBytes() {
   return fixEncoderSize(getBytesEncoder(), 8).encode(
-    CREATE_TOKEN_LEDGER_DISCRIMINATOR
+    CREATE_TOKEN_LEDGER_DISCRIMINATOR,
   );
 }
 
@@ -46,9 +46,8 @@ export type CreateTokenLedgerInstruction<
   TProgram extends string = typeof JUPITER_PROGRAM_ADDRESS,
   TAccountTokenLedger extends string | AccountMeta<string> = string,
   TAccountPayer extends string | AccountMeta<string> = string,
-  TAccountSystemProgram extends
-    | string
-    | AccountMeta<string> = '11111111111111111111111111111111',
+  TAccountSystemProgram extends string | AccountMeta<string> =
+    "11111111111111111111111111111111",
   TRemainingAccounts extends readonly AccountMeta<string>[] = [],
 > = Instruction<TProgram> &
   InstructionWithData<ReadonlyUint8Array> &
@@ -77,14 +76,14 @@ export type CreateTokenLedgerInstructionDataArgs = {};
 
 export function getCreateTokenLedgerInstructionDataEncoder(): FixedSizeEncoder<CreateTokenLedgerInstructionDataArgs> {
   return transformEncoder(
-    getStructEncoder([['discriminator', fixEncoderSize(getBytesEncoder(), 8)]]),
-    (value) => ({ ...value, discriminator: CREATE_TOKEN_LEDGER_DISCRIMINATOR })
+    getStructEncoder([["discriminator", fixEncoderSize(getBytesEncoder(), 8)]]),
+    (value) => ({ ...value, discriminator: CREATE_TOKEN_LEDGER_DISCRIMINATOR }),
   );
 }
 
 export function getCreateTokenLedgerInstructionDataDecoder(): FixedSizeDecoder<CreateTokenLedgerInstructionData> {
   return getStructDecoder([
-    ['discriminator', fixDecoderSize(getBytesDecoder(), 8)],
+    ["discriminator", fixDecoderSize(getBytesDecoder(), 8)],
   ]);
 }
 
@@ -94,7 +93,7 @@ export function getCreateTokenLedgerInstructionDataCodec(): FixedSizeCodec<
 > {
   return combineCodec(
     getCreateTokenLedgerInstructionDataEncoder(),
-    getCreateTokenLedgerInstructionDataDecoder()
+    getCreateTokenLedgerInstructionDataDecoder(),
   );
 }
 
@@ -119,7 +118,7 @@ export function getCreateTokenLedgerInstruction<
     TAccountPayer,
     TAccountSystemProgram
   >,
-  config?: { programAddress?: TProgramAddress }
+  config?: { programAddress?: TProgramAddress },
 ): CreateTokenLedgerInstruction<
   TProgramAddress,
   TAccountTokenLedger,
@@ -143,10 +142,10 @@ export function getCreateTokenLedgerInstruction<
   // Resolve default values.
   if (!accounts.systemProgram.value) {
     accounts.systemProgram.value =
-      '11111111111111111111111111111111' as Address<'11111111111111111111111111111111'>;
+      "11111111111111111111111111111111" as Address<"11111111111111111111111111111111">;
   }
 
-  const getAccountMeta = getAccountMetaFactory(programAddress, 'programId');
+  const getAccountMeta = getAccountMetaFactory(programAddress, "programId");
   return Object.freeze({
     accounts: [
       getAccountMeta(accounts.tokenLedger),
@@ -182,11 +181,11 @@ export function parseCreateTokenLedgerInstruction<
 >(
   instruction: Instruction<TProgram> &
     InstructionWithAccounts<TAccountMetas> &
-    InstructionWithData<ReadonlyUint8Array>
+    InstructionWithData<ReadonlyUint8Array>,
 ): ParsedCreateTokenLedgerInstruction<TProgram, TAccountMetas> {
   if (instruction.accounts.length < 3) {
     // TODO: Coded error.
-    throw new Error('Not enough accounts');
+    throw new Error("Not enough accounts");
   }
   let accountIndex = 0;
   const getNextAccount = () => {
